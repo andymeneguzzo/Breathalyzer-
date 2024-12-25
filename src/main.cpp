@@ -1,3 +1,5 @@
+// Da correggere la formula che dà risultati errati
+
 #include <iostream>
 #include <vector>
 #include <string>
