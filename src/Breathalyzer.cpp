@@ -60,6 +60,8 @@ std::string Breathalyzer::getSanzioniFromBAC(double bac) {
         return "Multa fino a 1064 euro e perdita di 10 punti dalla patente, 20 per neopatentati";
     } else if(bac >= 0.8 && bac < 1.5) {
         return "Multa fino a 3200 euro, perdita di 10 punti dalla patente, 20 per neopatentati, e sospensione da 6 a 12 mesi";
+    } else if(bac == 0){
+        return "Sei OKAY! bro";
     } else {
         return "Multa fino a 6000 euro, arresto da 6 a 12 mesi, perdita di 10 punti dalla patente, 20 se neopatentato, sospensione della patente da 12 a 24 mesi";
     }

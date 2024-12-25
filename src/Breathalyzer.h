@@ -9,7 +9,7 @@ class Breathalyzer {
     private:
         std::vector<Drink> drinks;
         std::vector<Meal> meals;
-        double userWeight;;
+        double userWeight;
         bool reduceForMeals;
 
     public:
