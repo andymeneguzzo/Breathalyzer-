@@ -18,25 +18,20 @@ void Breathalyzer::setUserWeight(double userWeight) {
 }
 
 double Breathalyzer::calculateBAC() {
-    double totalAlcoholGrams = 0.0;
+    double totalBAC = 0.0;
 
     for(const auto& d : drinks) {
-        totalAlcoholGrams += d.calculateAlcoholGrams();
-    }
+        double alcoholGrams = d.calculateAlcoholGrams();
+        double bacContribution = alcoholGrams / (userWeight * 0.68);
 
-    double bac = totalAlcoholGrams / (userWeight * 0.68);
+        double bacReduction = 0.15 * d.getTimeSinceDrink();
+        bacContribution -= bacReduction;
 
-    double totalTimeHours = 0.0;
-    if(!drinks.empty()) {
-        for(const auto& d : drinks) {
-            totalTimeHours += d.getTimeSinceDrink();
+        if(bacContribution < 0.0) {
+            bacContribution = 0.0;
         }
-        // totalTimeHours /= drinks.size();
+        totalBAC += bacContribution;
     }
-
-    double bacReduction = 0.15 * totalTimeHours;
-    bac -= bacReduction;
-    bac = fmax(bac, 0.0);
 
     if(reduceForMeals && !meals.empty()) {
         double totalMealFactor = 0.0;
@@ -46,11 +41,14 @@ double Breathalyzer::calculateBAC() {
         }
 
         double mealReduction = (totalMealFactor > 3.0) ? 0.30 : (0.10 * totalMealFactor);
-        bac = bac * (1.0 - mealReduction);
-        bac = fmax(bac, 0.0);
+        totalBAC = totalBAC * (1.0 - mealReduction);
+
+        if(totalBAC < 0.0) {
+            totalBAC = 0.0;
+        }
     }
 
-    return bac;
+    return totalBAC;
 }
 
 std::string Breathalyzer::getSanzioniFromBAC(double bac) {
