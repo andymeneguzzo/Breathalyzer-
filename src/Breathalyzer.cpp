@@ -31,11 +31,11 @@ double Breathalyzer::calculateBAC() {
         for(const auto& d : drinks) {
             totalTimeHours += d.getTimeSinceDrink();
         }
-        totalTimeHours /= drinks.size();
+        // totalTimeHours /= drinks.size();
     }
 
-    double gramsMetabolized = 7.0 * totalTimeHours;
-    bac -= gramsMetabolized / (userWeight * 0.68);
+    double bacReduction = 0.15 * totalTimeHours;
+    bac -= bacReduction;
     bac = fmax(bac, 0.0);
 
     if(reduceForMeals && !meals.empty()) {
